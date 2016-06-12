@@ -15,22 +15,13 @@
     z-index: 1;
     pointer-events: none;
         display: inline-block;
-        min-width: 70px;
-        min-height:30px;
 }
-.spoil_phrase_class {
+.spoil_phrase {
 
     position: relative;
     z-index: 1;
     pointer-events: none;
         display: inline-block;
-}
-
-.html_class{
-
-background-color: red;
-opacity:.99;
-
 }
 
 .overlay_class{
@@ -41,9 +32,7 @@ opacity:.99;
     top: 0;
     left: 0;
     background-color: rgba(100,100,100, 0.97);
-    display: block;
-    visibility: visible;
-    overflow:visible;
+    overflow-x: hidden;
 }
 .overlay_inner_class {
     position: fixed;

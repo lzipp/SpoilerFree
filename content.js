@@ -1,33 +1,23 @@
 
 //Content script for spoiler extension
-$( document ).ready(function() {
-  document.body.style.display = 'none !important';
-  console.log("in hideing")
- // document.body.style.color='green!important';
-});
+document.documentElement.style.visibility = 'hidden';
+
 console.log("running content script")
-var spoiler_list=[];
-var child_stat;   //used for static children of body (used now for espn overlay)
+var spoiler_list=[]
 var contact_message_to_back={'tag': 'load_to_content'}
-//get spoiler_list words from background.js
 chrome.runtime.sendMessage({greeting: contact_message_to_back}, function(response) {
   console.log("sending_message")
   spoiler_list=response.farewell;
-  script_to_cover(); //run main script once list is received
   });
 
-function script_to_cover(){                        // main script
-console.log("running cover script with this list:")
-console.log(spoiler_list)
-
-$( document ).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
   if (spoiler_list.length>0){
       cover_words(spoiler_list);
-      document.body.style.display = '';
+      document.documentElement.style.visibility = '';
   }
   else{
     console.log("no_blocked_words")
-      document.body.style.display = '';
+      document.documentElement.style.visibility = '';
   }
 
 var prevent_links_func= function(ev) {
@@ -36,28 +26,14 @@ var prevent_links_func= function(ev) {
 
 function add_overlay(wor){
   console.log("in add_overlay")
- // return
-
- child_stat= $('body').children().filter(function(){
-           var position = $(this).css('position');
-          return (position === 'static');
-       }).css({'position':'relative'});
- child_stat.css('zIndex', '-100');
- var position_children= child_stat.map(function(){
-      return ($(this).prop('position'));
-     }).get();
-
-// child_stat=$(document.body.children.querySelectorAll('[position="static"]'));
-// child_stat.css({'position':'relative'});
-// child_stat.css('zIndex', '-100');
-
+ // document.body.style.visibility="hidden";
   var overlay=document.createElement("div");
   var overlay_inner_div=document.createElement("div");
   var back_link=document.createElement("p")
   var forward_link=document.createElement("p")
   var spoiler_title=document.createElement("p")
   //overlay.id="overlay_elem";
-  overlay.className = "overlay_class";
+  overlay.className += "overlay_class";
   overlay_inner_div.className+="overlay_inner_class";
   back_link.className+= "navigation_back_class";
   forward_link.className+= "navigation_forward_class";
@@ -70,8 +46,6 @@ function add_overlay(wor){
   overlay_inner_div.appendChild(spoiler_title);
     overlay_inner_div.appendChild(back_link);
   overlay_inner_div.appendChild(forward_link);
- //document.documentElement.className = 'html_class'​​​​;
-//className+="html_class";
 
   function forward_link_func(my_btn){                 //removes the cover and button when clicked, and reveals the spoiler content
         $(my_btn).parent().parent().remove();
@@ -84,6 +58,8 @@ function add_overlay(wor){
   document.body.appendChild(overlay);
   $(".navigation_forward_class").click(function(){forward_link_func(this)})  //Sets the click function on all spoiler buttons
   $(".navigation_back_class").click(function(){back_link_func(this)})  //Sets the click function on all spoiler buttons
+
+
 }
 
 function cover_words(spoilers){
@@ -139,7 +115,7 @@ if (found==0){
          
         covering.appendChild(spoil_btn)
 
-        var all_of_it=$('*:containsIgnoreCase('+wor+')').filter(function() {
+        all_of_it=$('*:containsIgnoreCase('+wor+')').filter(function() {
             return (
             $(this).clone() //clone the element
             .children() //select all the children
@@ -147,53 +123,37 @@ if (found==0){
             .end() //again go back to selected element
             .filter('*:containsIgnoreCase('+wor+')').not(".spoil_covering_class,.spoiler_title_class,.navigation_forward_class,.navigation_back_class").length > 0)
         });
-
-        var a_tags_group= $("a[href*='"+wor.toLowerCase+"']");
-        if (a_tags_group.length>0){
-          console.log("found <a> tags")
-        };
-        var total_group=all_of_it.add(a_tags_group);
-        total_group=total_group.filter(function() {
-            return($(this).parents('script,head').length==0)
-        }); // removes elements inside script and head tags
-        total_group=total_group.not('script,head'); 
-        var all_with_a_parents=total_group.filter(function() {
-          return($(this).parents('a').length>0)
-        });
-        var additional_a_els=total_group.parents('a');
-        total_group=total_group.not(all_with_a_parents);
-        total_group=total_group.add(additional_a_els);
-        var set_a_children=total_group.children().filter("a")
-
-     //   var set1=total_group.closest("*:not('em'):not('span')"); // Can add other text styling tags (good for google search results where key word is bolded)
-       var set1=total_group.filter('em,span').parent()
-        var set2=total_group.not("em,span");
-       var  final_group=set1.add(set2);
-   //  var final_group=total_group
+        var set_a_parents=all_of_it.parents().filter("a")
+        var set_a_children=all_of_it.children().filter("a")
+        var extra_a=set_a_parents.add(set_a_children)
+        //var set_a=all_of_it.filter("a")
+        var set1=all_of_it.not("em,span");   // Can add other text styling tags (good for google search results where key word is bolded)
+        var set2=all_of_it.filter("em,span").parent(); 
+        var total_set= set1.add( set2 );
      //   var repeated_els=total_set.filter('$(this)>.spoil_covering_class');
-        var repeated_els=final_group.filter(function(){
+       console.log('before repeated_els')
+        var repeated_els=total_set.filter(function(){
           return( $(this).children().filter('.spoil_covering_class').length>0)
         })
        // var repeated_els=total_set.filter('$(this).children().filter('.spoil_covering_class');
-        var total_set_first=final_group.not(repeated_els);
-        final_group.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});   // the pointer-events prevent clicking hyperlinks etc. on the spoiler content
-        set_a_children.css({'pointer-events':'none','cursor':'default'});  
-        final_group.on('click',prevent_links_func); //disables all click events
-        set_a_children.on('click',prevent_links_func);
+        var total_set_first=total_set.not(repeated_els);
+        total_set.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});   // the pointer-events prevent clicking hyperlinks etc. on the spoiler content
+        extra_a.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});  
+        total_set.on('click',prevent_links_func); //disables all click events
+        extra_a.on('click',prevent_links_func);
         total_set_first.filter(function(){
            var position = $(this).css('position');
            return position === 'static';
         }).css({'position':'relative'});  //This makes sure there are no static (which is the default) positioned elements so that the cover can be absolutely positioned
         total_set_first.append(covering);
+        console.log("after covering")
         if (repeated_els.length>0){
-   old_covers=repeated_els.children().filter('.spoil_covering_class');
-        phrase_elem=old_covers.children().filter('.spoil_phrase_class')
-        updated_phrase=phrase_elem.html().concat(', '+ wor);
-        phrase_elem.html(updated_phrase);
+        old_covers=repeated_els.children().filter('.spoil_covering_class');
+        cur_phrase=old_covers.children().filter('.spoil_phrase_class')
+        updated_phrase=cur_phrase.html().concat(wor);
       };
         $(".spoil_btn_class").click(function(ev){btn_click_func(this,ev)})  //Sets the click function on all spoiler buttons
   }
 }
 
 });  // end of DOM loaded function
-}; //end of script_to_cover function
