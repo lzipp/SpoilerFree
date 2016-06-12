@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>My Test Page</title>
+    <style>
+      body {
+        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+        font-size: 100%;
+        width:200px;
+        height:200px;
+      }
+      #status{
+width:100px;
+height:100px;
+background-color:white;
+      }
+      div.spoiled_word_div{
+        background-color:rgb(200,200,200);
+        border-style: solid;
+        position:relative;
+      }
+      button.button_close{
+    line-height: 4px;
+     width: 4px;
+     font-size: 6pt;
+     font-family: tahoma;
+     margin-top: 1px;
+     margin-right: 2px;
+     position:absolute;
+     top:0;
+     right:0;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <form>
+  <input type="text" name="spoiler" id="spoiler_box">
+  <br>
+  <input type="submit" value="Block it!" id="sub">
+</form>
+  <div> Spoiler blocking: </div>
+
+  <div id="status"></div>
+  </body>
+    <script src="popup.js"></script>
+
+</html>
+

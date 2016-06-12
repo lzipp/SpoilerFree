@@ -1,0 +1,77 @@
+.spoil_btn_class {
+	background-color:blue;
+    pointer-events:auto;
+
+}
+
+.spoil_covering_class {
+    color: navy;
+    margin-left: 20px;
+        background-color: red;
+    position: relative;
+    top: 0;
+    left: 0;
+    visibility: visible;
+    z-index: 1;
+    pointer-events: none;
+        display: inline-block;
+        min-width: 70px;
+        min-height:30px;
+}
+.spoil_phrase_class {
+
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+        display: inline-block;
+}
+
+.html_class{
+
+background-color: red;
+opacity:.99;
+
+}
+
+.overlay_class{
+       height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    background-color: rgba(100,100,100, 0.97);
+    display: block;
+    visibility: visible;
+    overflow:visible;
+}
+.overlay_inner_class {
+    position: fixed;
+    top: 25%;
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+        font-size: 36px;
+        display: block;
+}
+.navigation_back_class {
+    color: #818181;
+    cursor:pointer;
+}
+
+.spoiler_title_class{
+color:"black";
+}
+.navigation_forward_class {
+    color: #818181;
+        cursor:pointer;
+
+}
+
+.navigation_forward_class:hover{
+    color: #f1f1f1;
+}
+
+.navigation_back_class:hover{
+    color: #f1f1f1;
+}

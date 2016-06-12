@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+
+  "name": "Ignorance Is Bliss",
+  "description": "Alerts and blocks web items that might contain spoilers for sports events, TV shows, etc.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "venice.png",
+    "default_popup": "popup.html",
+    "default_title": "click here! Yee"
+  },
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ],
+      "content_scripts":  [
+        {
+        "matches": ["<all_urls>"],  
+        "js": ["jquery.js", "content.js"],
+        "css": [ "spoil_styles.css" ],
+        "run_at": "document_start",
+       "all_frames": false
+        }
+        ],
+
+          "background": {
+    "scripts": ["background.js"],
+           "run_at": "document_start"        // pay attention to this line
+
+  }
+}
