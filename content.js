@@ -8,9 +8,18 @@ var contact_message_to_back={'tag': 'load_to_content'}
 chrome.runtime.sendMessage({greeting: contact_message_to_back}, function(response) {
   console.log("sending_message")
   spoiler_list=response.farewell;
+  console.log(spoiler_list)
+      if (document.readyState === 'interactive' || document.readyState==='complete') {
+      console.log("in ready loaded")
+      cover_script();
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+      console.log("just loaded")
+      cover_script();
+    });
+    };
   });
-
-document.addEventListener('DOMContentLoaded', function() {
+function cover_script(){
   if (spoiler_list.length>0){
       cover_words(spoiler_list);
       document.documentElement.style.visibility = '';
@@ -32,7 +41,6 @@ function add_overlay(wor){
   var back_link=document.createElement("p")
   var forward_link=document.createElement("p")
   var spoiler_title=document.createElement("p")
-  //overlay.id="overlay_elem";
   overlay.className += "overlay_class";
   overlay_inner_div.className+="overlay_inner_class";
   back_link.className+= "navigation_back_class";
@@ -41,7 +49,6 @@ function add_overlay(wor){
   spoiler_title.innerHTML="Material on this page about "+wor;
   forward_link.innerHTML="That's ok, let me in";
   back_link.innerHTML="Get me out of here!";
-  //overlay.innerHTML="WHHHHHHHAAAAAAAAAAAATTTTTT";
   overlay.appendChild(overlay_inner_div);
   overlay_inner_div.appendChild(spoiler_title);
     overlay_inner_div.appendChild(back_link);
@@ -126,11 +133,29 @@ if (found==0){
         var set_a_parents=all_of_it.parents().filter("a")
         var set_a_children=all_of_it.children().filter("a")
         var extra_a=set_a_parents.add(set_a_children)
-        //var set_a=all_of_it.filter("a")
-        var set1=all_of_it.not("em,span");   // Can add other text styling tags (good for google search results where key word is bolded)
-        var set2=all_of_it.filter("em,span").parent(); 
-        var total_set= set1.add( set2 );
-     //   var repeated_els=total_set.filter('$(this)>.spoil_covering_class');
+        var img_tags_group= $("img[src*='"+wor.toLowerCase()+"']");
+       // var a_tags_group= $("a[href*='"+wor.toLowerCase()+"']");
+        var a_tags_with_href=$("a[href]");
+        var a_tags_group=a_tags_with_href.filter(function() {
+          return $(this).attr('href').toLowerCase().indexOf(wor.toLowerCase()) > -1;
+        });
+        var img_tags_with_src=$("img[src]");
+        var img_tags_group=img_tags_with_src.filter(function() {
+          return $(this).attr('src').toLowerCase().indexOf(wor.toLowerCase()) > -1;
+        });
+        var img_tags_with_alt=$("img[alt]");
+        var img_tags_group_alt=img_tags_with_alt.filter(function() {
+          return $(this).attr('alt').toLowerCase().indexOf(wor.toLowerCase()) > -1;
+        });
+        all_of_it=all_of_it.add(a_tags_group).add(img_tags_group.parent()).add(img_tags_group_alt.parent());
+        var set1=all_of_it.not("em,span,a");   // Can add other text styling tags (good for google search results where key word is bolded)
+        var set2=all_of_it.filter("em,span,a").closest("*:not('em'):not('span'):not('a')"); // Can add other text styling tags (good for google search results where key word is bolded)
+        var total_set= set1.add( set2 );   
+         total_set=total_set.filter(function() {
+            return($(this).parents('script,head').length==0)
+        }); // removes elements inside script and head tags
+       
+            //   var repeated_els=total_set.filter('$(this)>.spoil_covering_class');
        console.log('before repeated_els')
         var repeated_els=total_set.filter(function(){
           return( $(this).children().filter('.spoil_covering_class').length>0)
@@ -141,6 +166,7 @@ if (found==0){
         extra_a.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});  
         total_set.on('click',prevent_links_func); //disables all click events
         extra_a.on('click',prevent_links_func);
+      //  total_set_first.css({'overflow':'visible'});
         total_set_first.filter(function(){
            var position = $(this).css('position');
            return position === 'static';
@@ -148,12 +174,13 @@ if (found==0){
         total_set_first.append(covering);
         console.log("after covering")
         if (repeated_els.length>0){
-        old_covers=repeated_els.children().filter('.spoil_covering_class');
-        cur_phrase=old_covers.children().filter('.spoil_phrase_class')
-        updated_phrase=cur_phrase.html().concat(wor);
-      };
+       old_covers=repeated_els.children().filter('.spoil_covering_class');
+        phrase_elem=old_covers.children().filter('.spoil_phrase_class')
+        updated_phrase=phrase_elem.html().concat(', '+ wor);
+        phrase_elem.html(updated_phrase);
+   };
         $(".spoil_btn_class").click(function(ev){btn_click_func(this,ev)})  //Sets the click function on all spoiler buttons
   }
 }
 
-});  // end of DOM loaded function
+};  // end of script_cover function

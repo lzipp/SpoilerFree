@@ -6,22 +6,31 @@
 
 .spoil_covering_class {
     color: navy;
-    margin-left: 20px;
-        background-color: red;
-    position: relative;
+/*    margin-left: 20px;
+*/        background-color: red;
+    position: absolute;
     top: 0;
     left: 0;
     visibility: visible;
     z-index: 1;
     pointer-events: none;
-        display: inline-block;
-}
-.spoil_phrase {
+    font-size: 14px;
+/*    display: inline-block;
+*//*       min-width: 400px;
+       min-height:50px;*/
+/*        width:100%;
+*/       height:100%;
+              width: 500px;
 
-    position: relative;
+       white-space: nowrap;
+}
+.spoil_phrase_class {
+
     z-index: 1;
     pointer-events: none;
         display: inline-block;
+            font-size: 14px;
+
 }
 
 .overlay_class{
@@ -42,6 +51,8 @@
     text-align: center;
         font-size: 36px;
         display: block;
+        background-color:rgb(200,200,200);
+        border-style: solid;
 }
 .navigation_back_class {
     color: #818181;

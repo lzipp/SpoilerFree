@@ -38,6 +38,9 @@ element.innerHTML = '';
 }
 
 function contains(arr, word) {
+  if (word.length<1){
+    return true;
+  }
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] === word) {
             return true;
@@ -52,13 +55,13 @@ var submitForm = function() {
   if (contains(spoiler_word_arr,spoiler_word)==false){
   console.log("Word to block: " + spoiler_word)
   spoiler_word_arr.push(spoiler_word)
-}
   renderStatus(spoiler_word_arr );
 
 var popup_message={'tag': 'popup', 'spoiled_words':spoiler_word_arr}
 chrome.runtime.sendMessage({greeting: popup_message}, function(response) {
   console.log('sent_popup_info');
 });
+};
 };
 
 document.addEventListener('DOMContentLoaded', function() {
