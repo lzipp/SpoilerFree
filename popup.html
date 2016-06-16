@@ -35,7 +35,12 @@ background-color:white;
      top:0;
      right:0;
       }
+     button.clear_all{
+    position:absolute;
+    right:20px;
+  }
     </style>
+
 
   </head>
 
@@ -44,8 +49,10 @@ background-color:white;
   <input type="text" name="spoiler" id="spoiler_box">
   <br>
   <input type="submit" value="Block it!" id="sub">
+  <button type="button" class="clear_all" id="clear_btn" >Clear All</button>
 </form>
-  <div> Spoiler blocking: </div>
+
+  <p> Blocked terms: </p>
 
   <div id="status"></div>
   </body>

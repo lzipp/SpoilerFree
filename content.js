@@ -147,6 +147,11 @@ if (found==0){
         var img_tags_group_alt=img_tags_with_alt.filter(function() {
           return $(this).attr('alt').toLowerCase().indexOf(wor.toLowerCase()) > -1;
         });
+        var elms_with_a_parents=all_of_it.filter(function(){
+          return $(this).parents().filter("a").length>0
+        });
+        var rest=all_of_it.not(elms_with_a_parents);
+        all_of_it=rest.add(elms_with_a_parents.parents().filter("a").last());// Gets the highest a tag ancestor
         all_of_it=all_of_it.add(a_tags_group).add(img_tags_group.parent()).add(img_tags_group_alt.parent());
         var set1=all_of_it.not("em,span,a");   // Can add other text styling tags (good for google search results where key word is bolded)
         var set2=all_of_it.filter("em,span,a").closest("*:not('em'):not('span'):not('a')"); // Can add other text styling tags (good for google search results where key word is bolded)

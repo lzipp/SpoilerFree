@@ -1,4 +1,13 @@
-var spoiler_word_arr=[]
+var spoiler_word_arr=[];
+ var clear_btn_func = function(){                 //removes the cover and button when clicked, and reveals the spoiler content
+          console.log("in clear all func");
+          spoiler_word_arr=[];
+          renderStatus(spoiler_word_arr );
+           }            
+// $(".clear_all").click(function(ev){clear_btn_func(this,ev)})  //Sets the click function on all spoiler buttons
+document.getElementById("clear_btn").addEventListener("click", clear_btn_func);
+
+
 
 function del_spoiled_word(num) {
     spoiler_word_arr.splice(num,1);
@@ -75,3 +84,4 @@ var contact_message={'tag': 'load_from_background'}
 })
 document.getElementById("sub").addEventListener("click", submitForm);
 
+// should change "click" to just when input form submitted...
