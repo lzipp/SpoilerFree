@@ -97,30 +97,33 @@ if (found==0){
 	      wor=spoiler_list[i]   // This is the current word to block
 
         var covering = document.createElement("div");     //create covering div element
-        covering.className += "spoil_covering_class"
+        covering.className += "spoil_covering_class";
+        var inner_div=document.createElement("div");
+        inner_div.className+="spoil_inner_class";
         var cover_phrase=document.createElement("p");
         cover_phrase.className+="spoil_phrase_class";
-        cover_phrase.innerHTML="This might contain info about "+wor;
-        covering.appendChild(cover_phrase);
+        cover_phrase.innerHTML="May contain info about "+wor;
+        covering.appendChild(inner_div)
+        inner_div.appendChild(cover_phrase);
 
         var spoil_btn=document.createElement("BUTTON")   //create button to get rid of cover
-        spoil_btn.innerHTML="X";
+        spoil_btn.innerHTML="REVEAL";
         spoil_btn.className += "spoil_btn_class";
 
         function btn_click_func(my_btn,ev){                 //removes the cover and button when clicked, and reveals the spoiler content
           ev.preventDefault();
           //ev.stopPropagation();
           console.log("in btn click func");
-          var word_containing_element= $(my_btn).parent().parent();
+          var word_containing_element= $(my_btn).parent().parent().parent();
           var set_a_parents=word_containing_element.parents().filter("a");
           var set_a_children=word_containing_element.children().filter("a");
           var all_elems=word_containing_element.add(set_a_parents).add(set_a_children);
           all_elems.off('click',prevent_links_func);
           all_elems.css({'visibility':'initial','pointer-events':'auto'});
-          $(my_btn).parent().remove()
+          $(my_btn).parent().parent().remove()
            } 
          
-        covering.appendChild(spoil_btn)
+        inner_div.appendChild(spoil_btn)
 
         all_of_it=$('*:containsIgnoreCase('+wor+')').filter(function() {
             return (
@@ -130,9 +133,7 @@ if (found==0){
             .end() //again go back to selected element
             .filter('*:containsIgnoreCase('+wor+')').not(".spoil_covering_class,.spoiler_title_class,.navigation_forward_class,.navigation_back_class").length > 0)
         });
-        var set_a_parents=all_of_it.parents().filter("a")
-        var set_a_children=all_of_it.children().filter("a")
-        var extra_a=set_a_parents.add(set_a_children)
+
         var img_tags_group= $("img[src*='"+wor.toLowerCase()+"']");
        // var a_tags_group= $("a[href*='"+wor.toLowerCase()+"']");
         var a_tags_with_href=$("a[href]");
@@ -167,9 +168,12 @@ if (found==0){
         })
        // var repeated_els=total_set.filter('$(this).children().filter('.spoil_covering_class');
         var total_set_first=total_set.not(repeated_els);
-        total_set.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});   // the pointer-events prevent clicking hyperlinks etc. on the spoiler content
+        var set_a_parents=total_set_first.parents().filter("a")
+        var set_a_children=total_set_first.children().filter("a")
+        var extra_a=set_a_parents.add(set_a_children)
+        total_set_first.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});   // the pointer-events prevent clicking hyperlinks etc. on the spoiler content
         extra_a.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});  
-        total_set.on('click',prevent_links_func); //disables all click events
+        total_set_first.on('click',prevent_links_func); //disables all click events
         extra_a.on('click',prevent_links_func);
       //  total_set_first.css({'overflow':'visible'});
         total_set_first.filter(function(){
@@ -180,7 +184,7 @@ if (found==0){
         console.log("after covering")
         if (repeated_els.length>0){
        old_covers=repeated_els.children().filter('.spoil_covering_class');
-        phrase_elem=old_covers.children().filter('.spoil_phrase_class')
+        phrase_elem=old_covers.children().children().filter('.spoil_phrase_class')
         updated_phrase=phrase_elem.html().concat(', '+ wor);
         phrase_elem.html(updated_phrase);
    };

@@ -3,6 +3,10 @@ var spoiler_word_arr=[];
           console.log("in clear all func");
           spoiler_word_arr=[];
           renderStatus(spoiler_word_arr );
+          var popup_message={'tag': 'popup', 'spoiled_words':spoiler_word_arr}
+          chrome.runtime.sendMessage({greeting: popup_message}, function(response) {
+           console.log('sent_popup_info');
+});
            }            
 // $(".clear_all").click(function(ev){clear_btn_func(this,ev)})  //Sets the click function on all spoiler buttons
 document.getElementById("clear_btn").addEventListener("click", clear_btn_func);
