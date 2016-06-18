@@ -98,21 +98,59 @@ if (found==0){
 
         wor=spoiler_list[i_count]   // This is the current word to block
   
-        new_elems=$('*:containsIgnoreCase('+wor+')').filter(function(){
-          return $(this).data(wor)!="true"
-        })
-        new_elems=new_elems.not(".spoil_covering_class,.spoil_btn_class,.spoil_inner_class,.spoiler_title_class,.spoil_phrase_class,.navigation_forward_class,.navigation_back_class,.overlay_class,.overlay_inner_class");
-   if (new_elems.length<1){
-    break;
-   }
-        all_of_it=$('*:containsIgnoreCase('+wor+')').filter(function() {
-            return (
-            $(this).clone() //clone the element
-            .children() //select all the children
-            .remove() //remove all the children
-            .end() //again go back to selected element
-            .filter('*:containsIgnoreCase('+wor+')').not(".spoil_covering_class,.spoil_btn_class,.spoil_inner_class,.spoiler_title_class,.spoil_phrase_class,.navigation_forward_class,.navigation_back_class,.overlay_class,.overlay_inner_class").length > 0)
-        });
+        // new_elems=$('*:containsIgnoreCase('+wor+')').filter(function(){
+        //   return $(this).data(wor)!="true"
+        // })
+        // new_elems=new_elems.not(".spoil_covering_class,.spoil_btn_class,.spoil_inner_class,.spoiler_title_class,.spoil_phrase_class,.navigation_forward_class,.navigation_back_class,.overlay_class,.overlay_inner_class");
+
+        // all_of_it=$('*:containsIgnoreCase('+wor+')').filter(function() {
+        //     return (
+        //     $(this).clone() //clone the element
+        //     .children() //select all the children
+        //     .remove() //remove all the children
+        //     .end() //again go back to selected element
+        //     .filter('*:containsIgnoreCase('+wor+')').not(".spoil_covering_class,.spoil_btn_class,.spoil_inner_class,.spoiler_title_class,.spoil_phrase_class,.navigation_forward_class,.navigation_back_class,.overlay_class,.overlay_inner_class").length > 0)
+        // });
+
+
+        // var nodes=$("*").filter(funtion(){
+        //         return this.contents().nodeType == 3; 
+        // }
+        //   )
+
+       var containing_text_nodes = $('*:containsIgnoreCase('+wor+')').contents().filter(function(){ 
+          if ($(this).length>0){
+                return this.nodeType == 3; 
+          }
+                  }).filter(function(){
+                    return $(this).text().toLowerCase().indexOf(wor.toLowerCase()) > -1;
+                  })
+                  console.log("containing text nodes")
+                  console.log(containing_text_nodes)
+                  var containing_parents=containing_text_nodes.parent();
+        all_of_it=containing_parents.not(".spoil_covering_class,.spoil_btn_class,.spoil_inner_class,.spoiler_title_class,.spoil_phrase_class,.navigation_forward_class,.navigation_back_class,.overlay_class,.overlay_inner_class")
+
+
+
+       // each(function( index ) {
+       //          console.log( index + ": " + $( this ).text() );
+       //                });
+
+        // console.log("textnodes:")
+        // console.log(text_nodes)
+        // text_nodes.each(check_text(this));
+        // function check_text(this_stuff){
+        //   console.log("this =")
+        //   console.log(this_stuff)
+        //    // if (this_stuff[0].nodeValue.toLowerCase().indexOf(wor.toLowerCase()) != -1){
+        //    //        if ($(this_stuff).parent().data(wor)!="covered"){
+        //    //        $(this_stuff).parent().data(wor,"marked")
+        //    //      }
+        //    //    }
+        // }
+
+
+
         all_of_it=all_of_it.filter(function(){
           return $(this).data(wor)!="true"
         })
@@ -128,6 +166,8 @@ if (found==0){
           return $(this).data(wor)!="true"
         })
         a_tags_group.data(wor,"true");
+
+
         var img_tags_with_src=$("img[src]");
         var img_tags_group_src=img_tags_with_src.filter(function() {
           return $(this).attr('src').toLowerCase().indexOf(wor.toLowerCase()) > -1;
@@ -136,16 +176,18 @@ if (found==0){
         var img_tags_group_alt=img_tags_with_alt.filter(function() {
           return $(this).attr('alt').toLowerCase().indexOf(wor.toLowerCase()) > -1;
         });
-        img_tags_group=img_tags_group_src.add(img_tags_group_alt);
+        var img_tags_group=img_tags_group_src.add(img_tags_group_alt);
+
         img_tags_group=img_tags_group.filter(function(){
           return $(this).data(wor)!="true"
         })
         img_tags_group.data(wor,"true");
 
-
       //  all_found_items=all_of_it.add(a_tags_group).add(img_tags_group).add(img_tags_group_alt);
       //  all_found_items.data( wor, true ); // marks element as containing word
-        all_of_it=all_of_it.add(a_tags_group).add(img_tags_group.parent()).add(img_tags_group_alt.parent());
+        //    all_of_it=all_of_it.add(a_tags_group);
+
+       all_of_it=all_of_it.add(a_tags_group).add(img_tags_group.parent());
    console.log("length is")
    console.log(all_of_it.length)
    if (all_of_it.length>0){
@@ -161,8 +203,6 @@ if (found==0){
             return($(this).parents('script,head').length==0)
         }); // removes elements inside script and head tags
        
-    console.log("totalset")
-    console.log(total_set)
         var covering = document.createElement("div");     //create covering div element
         covering.className += "spoil_covering_class";
         var inner_div=document.createElement("div");
