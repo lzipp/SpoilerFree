@@ -121,7 +121,6 @@ if (found==0){
           return $(this).data(wor)!="true"
         })
         a_tags_group.data(wor,"true");
-        a_tags=$();
 
         var img_tags_with_src=$("img[src]");
         var img_tags_group_src=img_tags_with_src.filter(function() {
@@ -157,18 +156,15 @@ if (found==0){
         }); // removes elements inside script and head tags
        
         var covering = document.createElement("div");     //create covering div element
-        covering.className += "spoil_covering_class";
+        covering.className  = "spoil_covering_class";
         var inner_div=document.createElement("div");
-        inner_div.className+="spoil_inner_class";
-        var cover_phrase=document.createElement("p");
-        cover_phrase.className+="spoil_phrase_class";
-        cover_phrase.innerHTML="May contain info about "+wor;
-        covering.appendChild(inner_div)
-        inner_div.appendChild(cover_phrase);
+        inner_div.className ="spoil_inner_class";
+        inner_div.innerHTML="Blocked content: " + wor ;
+        covering.appendChild(inner_div);
 
         var spoil_btn=document.createElement("BUTTON")   //create button to get rid of cover
         spoil_btn.innerHTML="REVEAL";
-        spoil_btn.className += "spoil_btn_class";
+        spoil_btn.className  = "spoil_btn_class";
 
         function btn_click_func(my_btn,ev){                 //removes the cover and button when clicked, and reveals the spoiler content
           ev.preventDefault();
@@ -180,7 +176,8 @@ if (found==0){
           var set_a_children=word_containing_element.children().filter("a");
           var all_elems=word_containing_element.add(set_a_parents).add(set_a_children);
           all_elems.off('click',prevent_links_func);
-          all_elems.css({'visibility':'initial','pointer-events':'auto'});
+          //all_elems.css({'visibility':'initial','pointer-events':'auto'});
+          all_elems.css({'pointer-events':'auto'});
           $(my_btn).parent().parent().remove()
           observer.observe(target_mutation,config_mutation)
            } 
@@ -195,8 +192,8 @@ if (found==0){
         var set_a_parents=total_set_first.parents().filter("a")
         var set_a_children=total_set_first.children().filter("a")
         var extra_a=set_a_parents.add(set_a_children)
-        total_set_first.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});   // the pointer-events prevent clicking hyperlinks etc. on the spoiler content
-        extra_a.css({'visibility':'hidden','pointer-events':'none','cursor':'default'});  
+        total_set_first.css({'pointer-events':'none','cursor':'default'});   // the pointer-events prevent clicking hyperlinks etc. on the spoiler content
+        extra_a.css({'pointer-events':'none','cursor':'default'});  
         total_set_first.on('click',prevent_links_func); //disables all click events
         extra_a.on('click',prevent_links_func);
       //  total_set_first.css({'overflow':'visible'});
@@ -208,10 +205,27 @@ if (found==0){
      //   console.log("after covering")
         if (repeated_els.length>0){
        old_covers=repeated_els.children().filter('.spoil_covering_class');
-        phrase_elem=old_covers.children().children().filter('.spoil_phrase_class')
-        updated_phrase=phrase_elem.html().concat(', '+ wor);
-        phrase_elem.html(updated_phrase);
-   };
+        inner_covering=old_covers.children().filter('.spoil_inner_class');
+      //  updated_phrase=phrase_elem.html().concat(', '+ wor);
+      //  phrase_elem.html(updated_phrase);
+      var phrase_node=inner_covering.contents().filter(function(){ 
+          if ($(this).length>0){
+                return this.nodeType == 3; 
+          }
+        })
+      if (phrase_node.length>0){
+              updated_phrase=phrase_node[0].nodeValue.concat(', '+ wor);
+              phrase_node[0].nodeValue=updated_phrase;
+      }
+    
+   //      var containing_text_nodes = $('*:containsIgnoreCase('+wor+')').contents().filter(function(){ 
+   //        if ($(this).length>0){
+   //              return this.nodeType == 3; 
+   //        }
+   //                }).filter(function(){
+   //                  return $(this).text().toLowerCase().indexOf(wor.toLowerCase()) > -1;
+   //                })
+    };
         var new_buttons=$(".spoil_btn_class").filter( function(){
           return $(this).data("placed")!="true";
         });
@@ -229,11 +243,11 @@ function add_overlay(wor){
   var back_link=document.createElement("p")
   var forward_link=document.createElement("p")
   var spoiler_title=document.createElement("p")
-  overlay.className += "overlay_class";
-  overlay_inner_div.className+="overlay_inner_class";
-  back_link.className+= "navigation_back_class";
-  forward_link.className+= "navigation_forward_class";
-  spoiler_title.className+="spoiler_title_class";
+  overlay.className = "overlay_class";
+  overlay_inner_div.className ="overlay_inner_class";
+  back_link.className = "navigation_back_class";
+  forward_link.className = "navigation_forward_class";
+  spoiler_title.className ="spoiler_title_class";
   spoiler_title.innerHTML="Material on this page about "+wor;
   forward_link.innerHTML="That's ok, let me in";
   back_link.innerHTML="Get me out of here!";
