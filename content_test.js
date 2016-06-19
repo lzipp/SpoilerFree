@@ -2,42 +2,40 @@
 //Content script for spoiler extension
 document.documentElement.style.visibility = 'hidden';
 
-//console.log("running content script")
+console.log("running content script")
 var spoiler_list=[]
 var refire=false;
+var mutated_target_list=$();
 // global variables for the DOM mutation observer:
 var target_mutation;
 var config_mutation;
 var observer;
 
-var contact_message_to_back={'tag': 'load_to_content'}
-chrome.runtime.sendMessage({greeting: contact_message_to_back}, function(response) {
-  console.log("sending_message")
-  spoiler_list=response.farewell;
-  if (spoiler_list.length<1){
-          document.documentElement.style.visibility = '';
-          return
-  };
-
-    $.expr[':'].containsIgnoreCase = function (n, i, m) {
+  $.expr[':'].containsIgnoreCase = function (n, i, m) {
   return jQuery(n).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
   }; //extends jquery with a case-insensitive contains selector method
 
 
+var contact_message_to_back={'tag': 'load_to_content'}
+chrome.runtime.sendMessage({greeting: contact_message_to_back}, function(response) {
+  console.log("sending_message")
+  spoiler_list=response.farewell;
   console.log(spoiler_list)
       if (document.readyState === 'interactive' || document.readyState==='complete') {
-     // console.log("in ready loaded")
+      console.log("in ready loaded")
       cover_script();
       refire=true;
     } else {
       document.addEventListener('DOMContentLoaded', function() {
-    //  console.log("just loaded DOM")
+      console.log("just loaded DOM")
       cover_script();
       refire=true;  
     });
     };
+    
+    console.log("here")
     if (document.readyState=="complete"){
-    //  console.log("already complete")
+      console.log("already complete")
        add_observer_listener();
       observer.observe(target_mutation, config_mutation);
     }else{window.addEventListener ? 
@@ -47,7 +45,7 @@ window.attachEvent && window.attachEvent("onload",yourFunction);
   });
 
 var yourFunction= function() {
-           // console.log("just fully loaded")
+            console.log("just fully loaded")
              add_observer_listener();
              observer.observe(target_mutation, config_mutation);
           };
@@ -56,64 +54,112 @@ var add_observer_listener=function(){
       target_mutation = document.body;
       config_mutation = { attributes: true, childList: true, characterData: true, subtree: true}
       observer = new MutationObserver(function(mutations) {
-        observer.takeRecords();
-      observer.disconnect();
-     // console.log("DOM changed, searching again")
+        observer.disconnect();
+        mutated_target_list=$();
+        mutations.forEach(function(mutation) {
+          targ=$(mutation.target);
+          if(mutation.type=="characterData"){
+            mutated_target_list=mutated_target_list.add(targ.parent());
+          }
+          else if(mutation.type=="childList"){
+            mutated_target_list=mutated_target_list.add(targ).add(targ.children()).add(targ.parent());
+          }
+          else{
+            mutated_target_list=mutated_target_list.add(targ);
+          }
+        console.log("mutation target changed:" + targ)
+        console.log("mutation typse"+mutation.type)
+        console.log("text is"+targ.text())
+       // mutated_target_list=mutated_target_list.add($(mutation.target))
+      });
+      observer.takeRecords();
+      console.log("DOM changed, searching again")
       cover_script();
       observer.observe(target_mutation, config_mutation);
     });
 }
 
 function cover_script(){
+  if (spoiler_list.length>0){
       cover_words(spoiler_list);
       document.documentElement.style.visibility = '';
+  }
+  else{
+    console.log("no_blocked_words")
+      document.documentElement.style.visibility = '';
+  }
 };  // end of script_cover function
 
 
-function cover_words(spoilers){
+function cover_words(){
   var i;
   var wor;
-  var found=0;
-  for (i=0; i<spoilers.length; i +=1){
-    wor=spoiler_list[i];
-    var all_content=document.body.innerHTML;
-    if (all_content.toLowerCase().indexOf(wor.toLowerCase()) != -1){
-     //   console.log('Found Matched');
-        found=1;
-        i=spoilers.length // This will make it the last iteration
-        if (refire===false){
-        add_overlay(wor);
-      }
-    } 
-  }
-if (found==0){
-   //     console.log("no match found")
-        return
-        }
 
-  for (i_count=0; i_count<spoilers.length; i_count +=1){
+  if (refire===false) {
+  var found=0;
+    for (i=0; i<spoiler_list.length; i +=1){
+      wor=spoiler_list[i];
+      var all_content=document.body.innerHTML;
+      if (all_content.toLowerCase().indexOf(wor.toLowerCase()) != -1){
+        console.log('Found Matched');
+        found=1;
+        i=spoiler_list.length // This will make it the last iteration
+        add_overlay(wor);
+        } 
+      }
+      if (found==0){
+          console.log("no match found")
+          return
+          }
+  }
+
+  for (i_count=0; i_count<spoiler_list.length; i_count +=1){
 
         wor=spoiler_list[i_count]   // This is the current word to block
-  
 
-       var containing_text_nodes = $('*:containsIgnoreCase('+wor+')').contents().filter(function(){ 
+      if (refire===false) {
+        mutated_target_list=$('*:containsIgnoreCase('+wor+')');
+        //img_and_a_targets=$("body");
+        //mutated_target_list=$("body");
+        //console.log("mutated_targets")
+       // console.log(mutated_target_list.find("*"))
+      }
+      else{
+           //   mutated_target_list=$('*:containsIgnoreCase('+wor+')');
+
+        mutated_target_list=mutated_target_list.filter('*:containsIgnoreCase('+wor+')');
+      }
+     // var target_nodes=mutated_target_list.add(mutated_target_list.find('*:containsIgnoreCase('+wor+')'))
+
+    // var containing_text_nodes = mutated_target_list.contents();
+       var containing_text_nodes = mutated_target_list.contents().filter(function(){ 
           if ($(this).length>0){
                 return this.nodeType == 3; 
           }
                   }).filter(function(){
                     return $(this).text().toLowerCase().indexOf(wor.toLowerCase()) > -1;
                   })
-              //    console.log("containing text nodes")
-              //    console.log(containing_text_nodes)
+                //  console.log("containing text nodes")
+                 // console.log(containing_text_nodes)
                   var containing_parents=containing_text_nodes.parent();
         all_of_it=containing_parents.not(".spoil_covering_class,.spoil_btn_class,.spoil_inner_class,.spoiler_title_class,.spoil_phrase_class,.navigation_forward_class,.navigation_back_class,.overlay_class,.overlay_inner_class")
+
 
         all_of_it=all_of_it.filter(function(){
           return $(this).data(wor)!="true"
         })
         all_of_it.data( wor, "true" ); // marks element as containing word
 
-      var a_tags_with_href=$("a[href]");
+       // var img_tags_group= $("img[src*='"+wor.toLowerCase()+"']");
+       // var a_tags_group= $("a[href*='"+wor.toLowerCase()+"']");
+        if (refire===true){
+          img_and_a_targets=mutated_target_list;
+        }else{
+          img_and_a_targets=$('*');
+        }
+        var a_tags_with_href=img_and_a_targets.filter("a[href]");
+           //     var a_tags_with_href=$("a[href]");
+
         var a_tags_group=a_tags_with_href.filter(function() {
           return $(this).attr('href').toLowerCase().indexOf(wor.toLowerCase()) > -1;
         });
@@ -121,13 +167,13 @@ if (found==0){
           return $(this).data(wor)!="true"
         })
         a_tags_group.data(wor,"true");
-        a_tags=$();
 
-        var img_tags_with_src=$("img[src]");
+
+        var img_tags_with_src=img_and_a_targets.filter("img[src]");
         var img_tags_group_src=img_tags_with_src.filter(function() {
           return $(this).attr('src').toLowerCase().indexOf(wor.toLowerCase()) > -1;
         });
-        var img_tags_with_alt=$("img[alt]");
+        var img_tags_with_alt=img_and_a_targets.filter("img[alt]");
         var img_tags_group_alt=img_tags_with_alt.filter(function() {
           return $(this).attr('alt').toLowerCase().indexOf(wor.toLowerCase()) > -1;
         });
@@ -138,19 +184,21 @@ if (found==0){
         })
         img_tags_group.data(wor,"true");
 
-       all_of_it=all_of_it.add(a_tags_group).add(img_tags_group.parent());
+      //  all_found_items=all_of_it.add(a_tags_group).add(img_tags_group).add(img_tags_group_alt);
+      //  all_found_items.data( wor, true ); // marks element as containing word
+        //    all_of_it=all_of_it.add(a_tags_group);
 
+       all_of_it=all_of_it.add(a_tags_group).add(img_tags_group.parent());
+   console.log("length is")
+   console.log(all_of_it.length)
    if (all_of_it.length>0){
         var elms_with_a_parents=all_of_it.filter(function(){
           return $(this).parents().filter("a").length>0
         });
         var rest=all_of_it.not(elms_with_a_parents);
         all_of_it=rest.add(elms_with_a_parents.parents().filter("a").last());// Gets the highest a tag ancestor
-     //   var set1=all_of_it.not("em,span,a");   // Can add other text styling tags (good for google search results where key word is bolded)
-     //   var set2=all_of_it.filter("em,span,a").closest("*:not('em'):not('span'):not('a')"); // Can add other text styling tags (good for google search results where key word is bolded)
-           var set1=all_of_it.not("em,span,a,li,ol");   // Can add other text styling tags (good for google search results where key word is bolded)
-        var set2=all_of_it.filter("em,span,a,li,ol").closest("*:not('em'):not('span'):not('a'):not('li'):not('ol')"); // Can add other text styling tags (good for google search results where key word is bolded)
-   
+        var set1=all_of_it.not("em,span,a");   // Can add other text styling tags (good for google search results where key word is bolded)
+        var set2=all_of_it.filter("em,span,a").closest("*:not('em'):not('span'):not('a')"); // Can add other text styling tags (good for google search results where key word is bolded)
         var total_set= set1.add( set2 );   
          total_set=total_set.filter(function() {
             return($(this).parents('script,head').length==0)
@@ -172,7 +220,7 @@ if (found==0){
 
         function btn_click_func(my_btn,ev){                 //removes the cover and button when clicked, and reveals the spoiler content
           ev.preventDefault();
-          ev.stopPropagation();
+          //ev.stopPropagation();
           console.log("in btn click func");
           observer.disconnect();
           var word_containing_element= $(my_btn).parent().parent().parent();
@@ -187,6 +235,9 @@ if (found==0){
          
         inner_div.appendChild(spoil_btn)
 
+
+            //   var repeated_els=total_set.filter('$(this)>.spoil_covering_class');
+       console.log('before repeated_els')
         var repeated_els=total_set.filter(function(){
           return( $(this).children().filter('.spoil_covering_class').length>0)
         })
@@ -205,18 +256,14 @@ if (found==0){
            return position === 'static';
         }).css({'position':'relative'});  //This makes sure there are no static (which is the default) positioned elements so that the cover can be absolutely positioned
         total_set_first.append(covering);
-     //   console.log("after covering")
+        console.log("after covering")
         if (repeated_els.length>0){
        old_covers=repeated_els.children().filter('.spoil_covering_class');
         phrase_elem=old_covers.children().children().filter('.spoil_phrase_class')
         updated_phrase=phrase_elem.html().concat(', '+ wor);
         phrase_elem.html(updated_phrase);
    };
-        var new_buttons=$(".spoil_btn_class").filter( function(){
-          return $(this).data("placed")!="true";
-        });
-        new_buttons.click(function(ev){btn_click_func(this,ev)});  //Sets the click function on all spoiler buttons
-        new_buttons.data("placed","true");
+        $(".spoil_btn_class").click(function(ev){btn_click_func(this,ev)})  //Sets the click function on all spoiler buttons
   }
 }
 }// end of cover_words function
