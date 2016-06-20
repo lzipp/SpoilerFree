@@ -17,7 +17,7 @@
     overflow:hidden;
 }
 .spoil_covering_class:hover{
-overflow:visible;
+overflow:hidden;
 }
 .spoil_covering_class:hover .spoil_inner_class{
     background-color:rgb(150,150,250);
