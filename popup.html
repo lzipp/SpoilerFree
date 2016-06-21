@@ -1,62 +1,54 @@
 <!doctype html>
 <!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
+  This page is shown when the extension button is clicked
+  -->
 <html>
   <head>
     <title>My Test Page</title>
     <style>
       body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-        width:200px;
-        height:200px;
+      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+      font-size: 100%;
+      width:200px;
+      height:200px;
       }
       #status{
-width:100px;
-height:100px;
-background-color:white;
+      width:100px;
+      height:100px;
+      background-color:white;
       }
       div.spoiled_word_div{
-        background-color:rgb(200,200,200);
-        border-style: solid;
-        position:relative;
+      background-color:rgb(200,200,200);
+      border-style: solid;
+      position:relative;
       }
       button.button_close{
-    line-height: 4px;
-     width: 4px;
-     font-size: 6pt;
-     font-family: tahoma;
-     margin-top: 1px;
-     margin-right: 2px;
-     position:absolute;
-     top:0;
-     right:0;
+      line-height: 4px;
+      width: 4px;
+      font-size: 6pt;
+      font-family: tahoma;
+      margin-top: 1px;
+      margin-right: 2px;
+      position:absolute;
+      top:0;
+      right:0;
       }
-     button.clear_all{
-    position:absolute;
-    right:20px;
-  }
+      button.clear_all{
+      position:absolute;
+      right:20px;
+      }
     </style>
-
-
   </head>
-
   <body>
-    <form>
-  <input type="text" name="spoiler" id="spoiler_box">
-  <br>
-  <input type="submit" value="Block it!" id="sub">
-  <button type="button" class="clear_all" id="clear_btn" >Clear All</button>
-</form>
-
-  <p> Blocked terms: </p>
-
-  <div id="status"></div>
+    <input type="text" name="spoiler" id="spoiler_box">
+    <br>
+    <input type="submit" value="Block it!" id="sub_form">
+    <button type="button" class="clear_all" id="clear_btn" >Clear All</button>
+    <div>
+    <input type="checkbox" name="overlay_option" id = "overlay_check" checked="checked" >full screen overlay
+    <div>
+    <p> Blocked terms: </p>
+    <div id="status"></div>
   </body>
-    <script src="popup.js"></script>
-
+  <script src="popup.js"></script>
 </html>
-

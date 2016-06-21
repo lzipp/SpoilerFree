@@ -1,108 +1,102 @@
 .spoil_covering_class {
     position: absolute;
-    z-index:1000;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    min-width:30px;
-    min-height:10px;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 30px;
+    min-height: 10px;
     visibility: inherit;
     pointer-events: auto;
-    line-height:normal;
+    line-height: normal;
     border-style: none;
-    display:inline-block;
-    background: linear-gradient(
-       rgb(255,255,255),rgb(240,240,240));
-    overflow:hidden;
+    display: inline-block;
+    background: linear-gradient( rgb(255, 255, 255), rgb(240, 240, 240));
+    overflow: hidden;
 }
-.spoil_covering_class:hover{
-overflow:hidden;
+.spoil_covering_class:hover {
+    overflow: hidden;
 }
-.spoil_covering_class:hover .spoil_inner_class{
-    background-color:rgb(150,150,250);
+.spoil_covering_class:hover .spoil_inner_class {
+    background-color: rgb(150, 150, 250);
 }
-
 .spoil_inner_class {
-    height:auto;
-    width:auto;
-    max-width:100%;
-    max-height:100%;
-    position:absolute;
-    background-color: rgb(180,180,250);
-    visibility:visible;
-    display:inline-block;
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    background-color: rgb(180, 180, 250);
+    visibility: visible;
+    display: inline-block;
     pointer-events: auto;
-    cursor:pointer;
-    font-size:14px;
-    border: 1px solid rgb(50,50,50);
-    padding-left:3px;
-    padding-right:3px;
+    cursor: pointer;
+    font-size: 14px;
+    border: 1px solid rgb(50, 50, 50);
+    padding-left: 3px;
+    padding-right: 3px;
 }
-.spoil_inner_class:hover .spoil_btn_class{
+.spoil_inner_class:hover .spoil_btn_class {
     display: inline-block;
 }
-.spoil_inner_class:hover{
-overflow:visible;
+.spoil_inner_class:hover {
+    overflow: visible;
 }
-
 .spoil_btn_class {
-	background-color:rgb(240,50,50);
-    pointer-events:auto;
-    font-size:12px;
-      width: 100%;
-  height: 100%;
-    padding: 2px; 
-  position: absolute;
-  top: 0;
-  left: 0;
-display:none;
-cursor:pointer;
+    background-color: rgb(240, 50, 50);
+    pointer-events: auto;
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    cursor: pointer;
 }
-.spoil_btn_class:hover{
+.spoil_btn_class:hover {
     display: inline-block;
 }
-
-.overlay_class{
-    top:0;
-    left:0;
-width:100%;
-height:100%;
+.overlay_class {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     position: fixed;
     z-index: 9999;
-    background-color: rgba(100,100,100, 0.97);
+    background-color: rgba(100, 100, 100, 0.97);
     overflow-x: hidden;
 }
 .overlay_inner_class {
     position: fixed;
     top: 20vh;
-    left:0;
+    left: 0;
     height: 50vh;
     width: 100%;
     padding: 8px;
     text-align: center;
-        font-size: 36px;
-        display: block;
-        background-color:rgb(200,200,200);
-        border-style: solid;
-        pointer-events:auto;
+    font-size: 36px;
+    display: block;
+    background-color: rgb(200, 200, 200);
+    border-style: solid;
+    pointer-events: auto;
 }
-
 .navigation_back_class {
     color: #818181;
-    cursor:pointer;
+    cursor: pointer;
 }
-
-.spoiler_title_class{
-color:"black";
+.spoiler_title_class {
+    color: "black";
 }
 .navigation_forward_class {
     color: #818181;
-        cursor:pointer;
+    cursor: pointer;
 }
-.navigation_back_class:hover{
+.navigation_back_class:hover {
     color: #f1f1f1;
 }
-.navigation_forward_class:hover{
+.navigation_forward_class:hover {
     color: #f1f1f1;
 }
