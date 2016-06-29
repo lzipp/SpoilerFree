@@ -71,10 +71,10 @@ function main_script() {
 };
 
 function cover_script() {
-  var found_object = word_check();
-  if (found_object["found"] === true) {
+  var found_words = word_check();
+  if (found_words.length>0) {
     if (refire === false && overlay_check_val == true) {
-      add_overlay(found_object["blocked_word"])
+      add_overlay(found_words)
     }
     cover_words();
   }
@@ -85,20 +85,15 @@ function cover_script() {
 
 function word_check() {
   var i;
+  var found_words=[];
   for (i = 0; i < blocked_list.length; i += 1) {
     var blocked_word = blocked_list[i];
     var all_content = document.body.innerHTML;
     if (all_content.toLowerCase().indexOf(blocked_word.toLowerCase()) != -1) {
-      return {
-        "found": true,
-        "blocked_word": blocked_word
-      };
+      found_words.push(blocked_word)
     }
   }
-  return {
-    "found": false,
-    "blocked_word": ""
-  };
+  return found_words
 };
 
 function cover_words() {
@@ -216,7 +211,7 @@ var make_spoiler_cover = function (blocked_word) {
   covering.className = "spoil_covering_class spoil_super";
   var inner_div = document.createElement("div");
   inner_div.className = "spoil_inner_class spoil_super";
-  inner_div.innerHTML = "Blocked content: " + blocked_word;
+  inner_div.innerHTML = " Blocked content: " + blocked_word;
   covering.appendChild(inner_div);
 
   var spoil_btn = document.createElement("BUTTON") //create button to get rid of cover
@@ -248,24 +243,50 @@ function spoil_btn_click_func(my_btn, ev) { //removes the cover and button when 
 
 
 
-function add_overlay(blocked_word) {
+function add_overlay(found_words) {
   var overlay = document.createElement("div");
   var overlay_inner_div = document.createElement("div");
-  var back_link = document.createElement("p")
-  var forward_link = document.createElement("p")
-  var spoiler_title = document.createElement("p")
-  overlay.className = "overlay_class spoil_super";
-  overlay_inner_div.className = "overlay_inner_class spoil_super";
-  back_link.className = "navigation_back_class spoil_super";
-  forward_link.className = "navigation_forward_class spoil_super";
-  spoiler_title.className = "spoiler_title_class spoil_super";
-  spoiler_title.innerHTML = "Material on this page about " + blocked_word;
+  var back_link = document.createElement("div");
+  var forward_link = document.createElement("div");
+  var overlay_message = document.createElement("div");
+  var alert_title=document.createElement("div");
+  overlay.className = "spoil_super";
+  overlay.id="overlay";
+  overlay_inner_div.className = "spoil_super";
+  overlay_inner_div.id="overlay_inner";
+  back_link.className = "spoil_super";
+  back_link.id="navigation_back";
+  forward_link.className = "spoil_super";
+  forward_link.id="navigation_forward";
+  overlay_message.className = "spoil_super";
+  overlay_message.id="overlay_message";
+  alert_title.className="spoil_super";
+  alert_title.id="alert_title";
+  var filter_text=document.createElement("span");
+  filter_text.className="spoil_super";
+  filter_text.id="filter_text"
+  filter_text.innerHTML="FILTER"
+  alert_title.appendChild(filter_text)
+  var alert_text=document.createElement("span");
+    alert_text.className="spoil_super";
+  alert_text.innerHTML=" alert"
+  alert_title.appendChild(alert_text)
+
+
+  overlay_message.innerHTML = "Material on this page about "
+  var blocked_word_span=document.createElement("span");
+  blocked_word_span.className="spoil_super";
+  blocked_word_span.id="blocked_word_span"
+  blocked_word_span.innerHTML= found_words.toString();
+  overlay_message.appendChild(blocked_word_span);
   forward_link.innerHTML = "That's ok, let me in";
   back_link.innerHTML = "Get me out of here!";
   overlay.appendChild(overlay_inner_div);
-  overlay_inner_div.appendChild(spoiler_title);
+  overlay_inner_div.appendChild(alert_title);
+  overlay_inner_div.appendChild(overlay_message);
   overlay_inner_div.appendChild(back_link);
   overlay_inner_div.appendChild(forward_link);
+
 
   function forward_link_func(my_btn) {
     if (typeof observer != "undefined") {
@@ -286,10 +307,10 @@ function add_overlay(blocked_word) {
   }
 
   document.body.appendChild(overlay);
-  $(".navigation_forward_class").click(function () {
+  $("#navigation_forward").click(function () {
     forward_link_func(this)
   })
-  $(".navigation_back_class").click(function () {
+  $("#navigation_back").click(function () {
     back_link_func(this)
   })
 } //end of add_overlay function

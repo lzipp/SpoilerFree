@@ -11,6 +11,8 @@
     "default_popup": "popup.html",
     "default_title": "FILTER"
   },
+  "web_accessible_resources": ["Logo_alert_30.png"],
+
   "permissions": [
     "activeTab",
     "https://ajax.googleapis.com/"

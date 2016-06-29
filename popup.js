@@ -50,7 +50,7 @@ function renderStatus(spoils) {
 // make the div that displays a blocked word
 function make_blocked_word_div(blocked_word, num) {
   var div = document.createElement("div");
-  div.classList.add("spoiled_word_div")
+  div.classList.add("item")
   div.innerHTML = blocked_word;
   var btn_close = document.createElement("BUTTON")
 
@@ -60,11 +60,7 @@ function make_blocked_word_div(blocked_word, num) {
     }
   }
   var del_spoiled_word_set = wrapper_delete(num)
-  btn_close.onclick = del_spoiled_word_set;
-  var t = document.createTextNode("X");
-  btn_close.classList.add("button_close")
-  btn_close.appendChild(t);
-  div.appendChild(btn_close)
+  div.onclick = del_spoiled_word_set;
   return div;
 };
 
@@ -91,7 +87,8 @@ function add_word_to_list(blocked_word) {
 // function for the blocked word submit form event listener
 var submitForm = function () {
   console.log('submitting form...');
-  var spoiler_word = document.getElementById("spoiler_box").value;
+  var spoiler_box = document.getElementById("spoiler_box");
+  var spoiler_word = spoiler_box.value;
   if (contains(spoiler_word_arr, spoiler_word) == false) {
     console.log("Word to block: " + spoiler_word)
     spoiler_word_arr.push(spoiler_word);
@@ -105,7 +102,9 @@ var submitForm = function () {
     }, function (response) {
       console.log('sent_popup_info');
     });
-  };
+  }
+  spoiler_box.value = '';
+
 };
 
 function register_click(check_value) {
