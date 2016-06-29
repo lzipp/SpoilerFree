@@ -72,7 +72,7 @@ function main_script() {
 
 function cover_script() {
   var found_words = word_check();
-  if (found_words.length>0) {
+  if (found_words.length > 0) {
     if (refire === false && overlay_check_val == true) {
       add_overlay(found_words)
     }
@@ -85,7 +85,7 @@ function cover_script() {
 
 function word_check() {
   var i;
-  var found_words=[];
+  var found_words = [];
   for (i = 0; i < blocked_list.length; i += 1) {
     var blocked_word = blocked_list[i];
     var all_content = document.body.innerHTML;
@@ -115,7 +115,7 @@ function cover_words() {
     all_of_it = all_of_it.filter(function () {
       return $(this).data(blocked_word) != "true"
     })
-    all_of_it.data(blocked_word, "true"); // marks element as containing blocked_wordd
+    all_of_it.data(blocked_word, "true"); // marks element as containing blocked_word
 
     var a_tags_with_href = $("a[href]");
     var a_tags_group = a_tags_with_href.filter(function () {
@@ -151,8 +151,8 @@ function cover_words() {
       });
       var rest = all_of_it.not(elms_with_a_parents);
       all_of_it = rest.add(elms_with_a_parents.parents().filter("a").last()); // Gets the highest a tag ancestor
-      var set1 = all_of_it.not("em,span,a,li"); // Can add other text styling tags (good for google search results where key blocked_wordd is bolded)
-      var set2 = all_of_it.filter("em,span,a,li").closest("*:not('em'):not('span'):not('a'):not('li')"); // Can add other text styling tags (good for google search results where key blocked_wordd is bolded)   
+      var set1 = all_of_it.not("em,span,a,li"); // Can add other text styling tags (good for google search results where key blocked_word is bolded)
+      var set2 = all_of_it.filter("em,span,a,li").closest("*:not('em'):not('span'):not('a'):not('li')"); // Can add other text styling tags (good for google search results where key blocked_word is bolded)   
       var total_set = set1.add(set2);
 
       var repeated_els = total_set.filter(function () {
@@ -249,35 +249,30 @@ function add_overlay(found_words) {
   var back_link = document.createElement("div");
   var forward_link = document.createElement("div");
   var overlay_message = document.createElement("div");
-  var alert_title=document.createElement("div");
+  var alert_title = document.createElement("div");
   overlay.className = "spoil_super";
-  overlay.id="overlay";
+  overlay.id = "overlay";
   overlay_inner_div.className = "spoil_super";
-  overlay_inner_div.id="overlay_inner";
+  overlay_inner_div.id = "overlay_inner";
   back_link.className = "spoil_super";
-  back_link.id="navigation_back";
+  back_link.id = "navigation_back";
   forward_link.className = "spoil_super";
-  forward_link.id="navigation_forward";
+  forward_link.id = "navigation_forward";
   overlay_message.className = "spoil_super";
-  overlay_message.id="overlay_message";
-  alert_title.className="spoil_super";
-  alert_title.id="alert_title";
-  var filter_text=document.createElement("span");
-  filter_text.className="spoil_super";
-  filter_text.id="filter_text"
-  filter_text.innerHTML="FILTER"
+  overlay_message.id = "overlay_message";
+  alert_title.className = "spoil_super";
+  alert_title.id = "alert_title";
+  var filter_text = document.createElement("span");
+  filter_text.className = "spoil_super";
+  filter_text.id = "filter_text"
+  filter_text.innerHTML = "FILTER"
   alert_title.appendChild(filter_text)
-  var alert_text=document.createElement("span");
-    alert_text.className="spoil_super";
-  alert_text.innerHTML=" alert"
-  alert_title.appendChild(alert_text)
-
 
   overlay_message.innerHTML = "Material on this page about "
-  var blocked_word_span=document.createElement("span");
-  blocked_word_span.className="spoil_super";
-  blocked_word_span.id="blocked_word_span"
-  blocked_word_span.innerHTML= found_words.toString();
+  var blocked_word_span = document.createElement("span");
+  blocked_word_span.className = "spoil_super";
+  blocked_word_span.id = "blocked_word_span"
+  blocked_word_span.innerHTML = found_words.toString();
   overlay_message.appendChild(blocked_word_span);
   forward_link.innerHTML = "That's ok, let me in";
   back_link.innerHTML = "Get me out of here!";

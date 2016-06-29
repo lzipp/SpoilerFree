@@ -1,35 +1,41 @@
-{
-  "manifest_version": 2,
-
-  "name": "FILTER",
-  "description": "Alerts and blocks web items that might contain spoilers for sports events, TV shows, etc.",
-  "version": "1.0",
-  "icons": { "128": "Logo4_128.png" },
-
-  "browser_action": {
-    "default_icon": "Logo6_128.png",
-    "default_popup": "popup.html",
-    "default_title": "FILTER"
-  },
-  "web_accessible_resources": ["Logo_alert_30.png"],
-
-  "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
-  ],
-      "content_scripts":  [
-        {
-        "matches": ["<all_urls>"],  
-        "js": ["jquery.js", "content.js"],
-        "css": [ "spoil_styles.css" ],
-        "run_at": "document_start",
-       "all_frames": true
-        }
-        ],
-
-          "background": {
-    "scripts": ["background.js"],
-           "run_at": "document_start"     
-
-  }
+{  
+   "manifest_version":2,
+   "name":"FILTER",
+   "description":"Alerts and blocks web items that might contain spoilers for sports events, TV shows, etc.",
+   "version":"1.0",
+   "icons":{  
+      "128":"Logo_128.png",
+      "16":"Logo_16.png"
+   },
+   "browser_action":{  
+      "default_icon":"Logo_16.png",
+      "default_popup":"popup.html",
+      "default_title":"FILTER"
+   },
+   "permissions":[  
+      "activeTab",
+      "https://ajax.googleapis.com/"
+   ],
+   "content_scripts":[  
+      {  
+         "matches":[  
+            "<all_urls>"
+         ],
+         "js":[  
+            "jquery.js",
+            "content.js"
+         ],
+         "css":[  
+            "spoil_styles.css"
+         ],
+         "run_at":"document_start",
+         "all_frames":true
+      }
+   ],
+   "background":{  
+      "scripts":[  
+         "background.js"
+      ],
+      "run_at":"document_start"
+   }
 }
