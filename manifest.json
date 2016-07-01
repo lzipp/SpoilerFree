@@ -1,8 +1,8 @@
 {  
    "manifest_version":2,
-   "name":"FILTER",
+   "name":"SpoilerFree",
    "description":"Blocks spoilers (sports, TV shows, etc.) and other unwanted content from ruining your web browsing experience",
-   "version":"1.1",
+   "version":"1.2",
    "icons":{  
       "128":"Logo_128.png",
       "16":"Logo_16.png"
