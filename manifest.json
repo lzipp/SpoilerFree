@@ -1,8 +1,8 @@
 {  
    "manifest_version":2,
    "name":"FILTER",
-   "description":"Alerts and blocks web items that might contain spoilers for sports events, TV shows, etc.",
-   "version":"1.0",
+   "description":"Blocks spoilers (sports, TV shows, etc.) and other unwanted content from ruining your web browsing experience",
+   "version":"1.1",
    "icons":{  
       "128":"Logo_128.png",
       "16":"Logo_16.png"

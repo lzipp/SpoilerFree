@@ -14,6 +14,8 @@
     display: inline-block !important;
     background: linear-gradient( rgb(245, 245, 245), rgb(235, 235, 235)) !important;
     overflow: visible !important;
+    margin: 0 !important;
+    padding:0 !important;
 }
 .spoil_covering_class:hover .spoil_inner_class {
     border: 1px solid black !important;
@@ -123,6 +125,7 @@
     border-style: none !important;
     color: "black" !important;
     font-size: 6vh !important;
+    font-family: fantasy !important;
     margin: 0 !important;
     box-sizing: initial !important;
 }

@@ -265,7 +265,7 @@ function add_overlay(found_words) {
   var filter_text = document.createElement("span");
   filter_text.className = "spoil_super";
   filter_text.id = "filter_text"
-  filter_text.innerHTML = "FILTER"
+  filter_text.innerHTML = "SpoilerFree"
   alert_title.appendChild(filter_text)
 
   overlay_message.innerHTML = "Material on this page about "
