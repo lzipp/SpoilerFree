@@ -6,7 +6,7 @@ File descriptions:
 
 manifest.json - Specifies the files and logo icons to be used for the Chrome extension, as well as setting some options/permissions.
 
-content.js - Main Javascript file that searches through the loaded webpage and if a term that is on the "blocked words list" is found, it covers the relevant HTML element. An event listener is used to run the search again when any HTML elements are altered or if any new nodes are added.
+content.js - Main Javascript file that searches through the loaded webpage and if a term that is on the "blocked words list" is found, it covers the relevant HTML element. The DOM MutationObserver event listener is used to fire the search again if any HTML nodes are added to the webpage or if their text is altered.
 
 popup.html (.js .css) - HTML file and associated JS and CSS files for the popup window that displays when the Chrome extension icon is clicked. It allows you to add words to the "blocked words list" and to toggle an optional full screen warning if a webpage contains any blocked terms.
 
